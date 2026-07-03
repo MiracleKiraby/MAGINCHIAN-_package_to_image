@@ -2,66 +2,52 @@
 <html>
 
 <head>
-
-<meta charset="utf-8">
-
-<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
+  <meta charset="utf-8">
+  <!-- A-Frame と MindAR の読み込み -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
 
 <body>
+  <!-- 
+    filterMinCF, filterBeta を追加してトラッキングを安定化
+    missTolerance を入れて見失った時の挙動を調整
+  -->
+  <a-scene 
+    mindar-image="imageTargetSrc: package.mind; filterMinCF:0.001; filterBeta: 0.01; missTolerance: 3;" 
+    color-space="sRGB"
+    embedded 
+    vr-mode-ui="enabled:false" 
+    device-orientation-permission-ui="enabled:false">
 
-<a-scene
+    <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
 
-mindar-image="imageTargetSrc: package.mind;"
+    <!-- アセット管理: crossorigin を追加 -->
+    <a-assets>
+      <img id="character" src="character.PNG" crossorigin="anonymous">
+    </a-assets>
 
-color-space="sRGB"
-
-embedded
-
-vr-mode-ui="enabled:false"
-
-device-orientation-permission-ui="enabled:false"
-
->
-
-<a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
-
-<a-assets>
-
-<img id="character" src="character.PNG">
-
-</a-assets>
-
-<a-entity mindar-image-target="targetIndex:0">
-
-<a-plane
-
-src="#character"
-
-position="0 0.3 0"
-
-width="1.2"
-
-height="1.2"
-
-animation="property: position;
-             from: 0 0.25 0;
-             to: 0 0.35 0;
-             dir: alternate;
-             dur: 1200;
-             loop: true;"
-
->
-
-</a-plane>
-
-</a-entity>
-
-</a-scene>
-
+    <!-- マーカー認識時のターゲットエリア -->
+    <a-entity mindar-image-target="targetIndex:0">
+      <!-- 
+        material に transparent: true と shader: flat を指定
+        これで画像が暗くなったり、透明部分がバグるのを防ぎます
+      -->
+      <a-plane 
+        src="#character" 
+        position="0 0.3 0" 
+        width="1.2" 
+        height="1.2"
+        material="transparent: true; shader: flat; side: double;"
+        animation="property: position;
+                   from: 0 0.25 0;
+                   to: 0 0.35 0;
+                   dir: alternate;
+                   dur: 1200;
+                   loop: true;">
+      </a-plane>
+    </a-entity>
+  </a-scene>
 </body>
 
 </html>
