@@ -3,48 +3,44 @@
 
 <head>
   <meta charset="utf-8">
-  <!-- A-Frame と MindAR の読み込み -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 
+    バージョンを実績のある安定した組み合わせ（A-Frame 1.4.2 + MindAR 1.2.2）に変更します。
+    これで無限ローディング（くるくる）が解消されます。
+  -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
 </head>
 
 <body>
-  <!-- 
-    filterMinCF, filterBeta を追加してトラッキングを安定化
-    missTolerance を入れて見失った時の挙動を調整
-  -->
+  <!-- くるくるが止まらない原因になりやすい複雑なパラメータを一旦シンプルに戻します -->
   <a-scene 
-    mindar-image="imageTargetSrc: package.mind; filterMinCF:0.001; filterBeta: 0.01; missTolerance: 3;" 
+    mindar-image="imageTargetSrc: package.mind;" 
     color-space="sRGB"
     embedded 
-    vr-mode-ui="enabled:false" 
-    device-orientation-permission-ui="enabled:false">
+    vr-mode-ui="enabled: false" 
+    device-orientation-permission-ui="enabled: false">
 
-    <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+    <!-- カメラの設定（A-Frame 1.4.2用に通常の設定に戻します） -->
+    <a-camera position="0 0 0" look-controls="enabled: false" raycaster="objects: .cantap"></a-camera>
 
-    <!-- アセット管理: crossorigin を追加 -->
+    <!-- アセット管理 -->
     <a-assets>
       <img id="character" src="character.PNG" crossorigin="anonymous">
     </a-assets>
 
-    <!-- マーカー認識時のターゲットエリア -->
-    <a-entity mindar-image-target="targetIndex:0">
+    <!-- マーカー認識時のターゲット -->
+    <a-entity mindar-image-target="targetIndex: 0">
       <!-- 
-        material に transparent: true と shader: flat を指定
-        これで画像が暗くなったり、透明部分がバグるのを防ぎます
+        初期状態で非表示になるバグを防ぐため、positionやmaterialを標準的な形に整理しました。
+        まずはアニメーションなしで確実に「画像が表示されるか」を確認します。
       -->
       <a-plane 
         src="#character" 
-        position="0 0.3 0" 
-        width="1.2" 
-        height="1.2"
-        material="transparent: true; shader: flat; side: double;"
-        animation="property: position;
-                   from: 0 0.25 0;
-                   to: 0 0.35 0;
-                   dir: alternate;
-                   dur: 1200;
-                   loop: true;">
+        position="0 0 0" 
+        width="1" 
+        height="1"
+        material="transparent: true; shader: flat; side: double;">
       </a-plane>
     </a-entity>
   </a-scene>
