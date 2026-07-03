@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+</head>
+
+<body>
+
+<a-scene
+
+mindar-image="imageTargetSrc: package.mind;"
+
+color-space="sRGB"
+
+embedded
+
+vr-mode-ui="enabled:false"
+
+device-orientation-permission-ui="enabled:false"
+
+>
+
+<a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+
+<a-assets>
+
+<img id="character" src="character.PNG">
+
+</a-assets>
+
+<a-entity mindar-image-target="targetIndex:0">
+
+<a-plane
+
+src="#character"
+
+position="0 0.3 0"
+
+width="1.2"
+
+height="1.2"
+
+animation="property: position;
+             from: 0 0.25 0;
+             to: 0 0.35 0;
+             dir: alternate;
+             dur: 1200;
+             loop: true;"
+
+>
+
+</a-plane>
+
+</a-entity>
+
+</a-scene>
+
+</body>
+
+</html>
